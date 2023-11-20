@@ -25,12 +25,34 @@ export async function generateImagePrompt(name: string) {
 
     const data = await response.json();
 
-    const imageDescription = data.choices[0].message.content;
-    return imageDescription as string;
+    return "some image description because I do not want to pay for a test project";
+
+    // this will work if you have enough credits on your OpenAi Account
+
+    // const imageDescription = data.choices[0].message.content;
+    // return imageDescription as string;
   } catch (error) {
     console.log(error);
     throw error;
   }
 }
 
-// export async function generateImage() {}
+export async function generateImage(imageDescription: string) {
+  try {
+    const response = await openai.createImage({
+      prompt: imageDescription,
+      n: 1,
+      size: "256x256",
+    });
+
+    const data = await response.json();
+
+    return "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
+    // this will work if you have enough credits on your OpenAi Account
+    // const imageUrl = data.data[0].url;
+    // return imageUrl as string;
+  } catch (error) {
+    console.error(error);
+  }
+}

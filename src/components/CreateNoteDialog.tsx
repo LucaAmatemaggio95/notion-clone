@@ -1,5 +1,8 @@
 "use client";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import {
@@ -16,6 +19,32 @@ type Props = {};
 
 const CreateNoteDialog = (props: Props) => {
   const [input, setInput] = useState("");
+  const router = useRouter();
+
+  const createNoteBook = useMutation({
+    mutationFn: async () => {
+      const response = await axios.post("/api/createNoteBook", {
+        name: input,
+      });
+      return response.data;
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (input === "" || input === null) {
+      return;
+    }
+    createNoteBook.mutate(undefined, {
+      onSuccess: ({ noteId }) => {
+        console.log("yay note created:", noteId);
+        router.push(`/notebook/${noteId}`);
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    });
+  };
 
   return (
     <Dialog>
@@ -34,7 +63,7 @@ const CreateNoteDialog = (props: Props) => {
             You can create a new note by clicking the button below
           </DialogDescription>
         </DialogHeader>
-        <form>
+        <form onSubmit={handleSubmit}>
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -45,7 +74,11 @@ const CreateNoteDialog = (props: Props) => {
             <Button type="reset" variant={"secondary"}>
               Cancel
             </Button>
-            <Button type="submit" className="bg-green-600">
+            <Button
+              disabled={createNoteBook.isPending}
+              type="submit"
+              className="bg-green-600"
+            >
               Create
             </Button>
           </div>
