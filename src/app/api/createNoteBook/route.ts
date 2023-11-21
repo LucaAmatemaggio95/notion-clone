@@ -4,6 +4,9 @@ import { generateImage, generateImagePrompt } from "@/lib/openai";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
+// used to speed-up on Vercel
+export const runtime = "edge";
+
 export async function POST(req: Request) {
   const { userId } = auth();
 

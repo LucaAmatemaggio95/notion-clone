@@ -20,7 +20,7 @@ const DashboardPage = async (props: Props) => {
     .where(eq($notes.userId, userId.userId!));
 
   return (
-    <div className="grainy min-h-screen">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto p-10">
         <div className="h-14"></div>
         <div className="flex md:flex-row sm:flex-col justify-between items-center">

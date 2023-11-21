@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="bg-gradient-to-r grainy min-h-screen from-rose-100 to-teal-100">
+    <div className="bg-gradient-to-r min-h-screen from-rose-50 via-white to-teal-50">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <h1 className="font-semibold text-7xl text-center">
           <span className="text-green-600 font-bold">Notion</span> Clone

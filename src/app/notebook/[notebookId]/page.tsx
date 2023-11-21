@@ -42,7 +42,7 @@ const NoteBookPage = async ({ params: { notebookId } }: Props) => {
   const note = notes[0];
 
   return (
-    <div className="min-h-screen grainy p-8">
+    <div className="min-h-screen p-8">
       <div className="max-w-4 mx-auto">
         <div className="border shadow-xl border-zinc-200 rounded-lg p-4 flex items-center">
           <Link href={"/dashboard"}>
