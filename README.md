@@ -38,4 +38,27 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 --------------------------
 
 npx drizzle-kit push:pg -> push the drizzle schema to the NeonDB
+
 npx drizzle-kit studio -> opens the Drizzle studio
+
+---------------------------
+
+In order to make it work you have to create a .env file inside the root of the project with the following properties
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=api_key_obtained_from_clerk
+
+CLERK_SECRET_KEY=clerk_secret_key
+
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=url_for_clerk_sign_in
+
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=url_for_clerk_sign_up
+
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=redirect_url_after_sign_in
+
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=redirect_url_after_sign_up
+
+DATABASE_URL=neondb_postgres_connection_string
+
+OPENAI_API_KEY=openapi_api_key
+
+FIREBASE_API_KEY=firebase_api_key
