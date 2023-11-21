@@ -2,10 +2,12 @@
 import { NoteType } from "@/lib/db/schema";
 import { useDebounce } from "@/lib/useDebounce";
 import { useMutation } from "@tanstack/react-query";
+import Text from "@tiptap/extension-text";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
+import { useCompletion } from "ai/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TipTapMenuBar from "./TipTapMenuBar";
 import { Button } from "./ui/button";
 
@@ -13,6 +15,10 @@ type Props = { note: NoteType };
 
 const TipTapEditor = ({ note }: Props) => {
   const [editorState, setEditorState] = useState(note.editorState ?? "");
+
+  const { complete, completion } = useCompletion({
+    api: "/api/completion",
+  });
 
   const saveNote = useMutation({
     mutationFn: async () => {
@@ -24,14 +30,41 @@ const TipTapEditor = ({ note }: Props) => {
     },
   });
 
+  const customText = Text.extend({
+    addKeyboardShortcuts() {
+      return {
+        "Shift-a": () => {
+          // take the last 30 words
+          const prompt = this.editor.getText().split(" ").slice(-30).join(" ");
+          complete(prompt);
+          return true;
+        },
+      };
+    },
+  });
+
   const editor = useEditor({
     autofocus: true,
-    extensions: [StarterKit],
+    extensions: [StarterKit, customText],
     content: editorState,
     onUpdate: ({ editor }) => {
       setEditorState(editor.getHTML());
     },
   });
+
+  // last completion from GPT
+  const lastCompletion = useRef("");
+
+  useEffect(() => {
+    if (!completion || !editor) {
+      return;
+    }
+    // token coming from GPT -> is the last word
+    const diff = completion.slice(lastCompletion.current.length);
+    lastCompletion.current = completion;
+    // insert text gradually into the editor
+    editor.commands.insertContent(diff);
+  }, [completion, editor]);
 
   const debouncedEditorState = useDebounce(editorState, 500);
 
