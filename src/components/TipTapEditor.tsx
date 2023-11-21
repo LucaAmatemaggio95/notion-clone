@@ -14,7 +14,9 @@ import { Button } from "./ui/button";
 type Props = { note: NoteType };
 
 const TipTapEditor = ({ note }: Props) => {
-  const [editorState, setEditorState] = useState(note.editorState ?? "");
+  const [editorState, setEditorState] = useState(
+    note.editorState ?? `<h1>${note.name}</h1>`
+  );
 
   const { complete, completion } = useCompletion({
     api: "/api/completion",
@@ -87,7 +89,7 @@ const TipTapEditor = ({ note }: Props) => {
     <>
       <div className="flex">
         {editor && <TipTapMenuBar editor={editor} />}
-        <Button disabled variant={"outline"}>
+        <Button className="ml-auto" disabled variant={"outline"}>
           {saveNote.isPending ? "Saving..." : "Saved"}
         </Button>
       </div>
@@ -97,10 +99,10 @@ const TipTapEditor = ({ note }: Props) => {
 
       <div className="h-4"></div>
       <span className="text-sm">
-        Tip: Press
-        <kbd className="mx-2 px-1 py-1.5 text-xs font-semibold bg-gray-100 border border-gray-200 rounded-lg">
+        Tip: Press{" "}
+        <kbd className="px-1 py-1.5 text-xs font-semibold bg-gray-100 border border-gray-200 rounded-lg">
           Shift + A
-        </kbd>
+        </kbd>{" "}
         for AI autocomplete
       </span>
     </>
